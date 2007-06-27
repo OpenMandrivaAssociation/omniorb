@@ -1,9 +1,10 @@
-%define version 4.0.6
-%define release %mkrel 3
+%define version 4.1.0
+%define release %mkrel 1
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
 %define lib_name	%mklibname %{name} %{lib_major}
+%define lib_namedevel	%mklibname -d %{name}
 %{expand:%%define py_ver %(python -V 2>&1| awk '{print $2}'|cut -d. -f1-2)}
 
 # virtual (ie empty) package to enforce naming convention
@@ -14,7 +15,7 @@ Version:	%{version}
 Release:	%{release}
 License:	GPL
 Group:		System/Libraries
-Source0:	omniORB-%{version}.tar.bz2
+Source0:	omniORB-%{version}.tar.gz
 Source1:	omniEvents-2_4_0-src.tar.bz2
 Source2:	omniORB.cfg
 Source3:	omninames
@@ -49,14 +50,15 @@ linked with %{lib_name_orig}.
 Warning:
 Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
-%package -n	%{lib_name}-devel
+%package -n	%{lib_namedevel}
 Summary:	Header files and libraries needed for %{name} development
 Group:		Development/C++
 Requires:	%{lib_name} = %{version}
 Provides:	%{lib_name_orig}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:  %mklibname -d %name 4
 
-%description -n	%{lib_name}-devel
+%description -n	%{lib_namedevel}
 This package includes the header files and libraries needed for
 developing programs using %{name}.
 
@@ -117,7 +119,7 @@ chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 
 %files
 %defattr (-,root,root)
-%doc CREDITS bugfixes* ReleaseNotes_%{version}.txt
+%doc CREDITS ReleaseNotes.txt README.FIRST.txt README.unix
 %_bindir/*
 %config(noreplace) %_sysconfdir/*.cfg
 %config(noreplace) %_sysconfdir/init.d/*
@@ -129,7 +131,7 @@ chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 %{_libdir}/*.so.*
 %_libdir/python%{py_ver}/site-packages/_omniidlmodule.so.*
 
-%files -n %{lib_name}-devel
+%files -n %{lib_namedevel}
 %defattr(-,root,root)
 %doc README* 
 %{_libdir}/*.a
