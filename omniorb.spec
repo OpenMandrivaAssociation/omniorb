@@ -1,11 +1,13 @@
 %define version 4.1.0
-%define release %mkrel 1
+%define release %mkrel 2
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
 %define lib_name	%mklibname %{name} %{lib_major}
-%define lib_namedevel	%mklibname -d %{name}
 %{expand:%%define py_ver %(python -V 2>&1| awk '{print $2}'|cut -d. -f1-2)}
+%define python_compile_opt python -O -c "import compileall; compileall.compile_dir('.')"
+%define python_compile     python -c "import compileall; compileall.compile_dir('.')"
+%{?!mdkversion: %define notmdk 1}
 
 # virtual (ie empty) package to enforce naming convention
 
@@ -15,7 +17,7 @@ Version:	%{version}
 Release:	%{release}
 License:	GPL
 Group:		System/Libraries
-Source0:	omniORB-%{version}.tar.gz
+Source0:	http://prdownloads.sourceforge.net/sourceforge/omniorb/omniORB-%{version}.tar.gz
 Source1:	omniEvents-2_4_0-src.tar.bz2
 Source2:	omniORB.cfg
 Source3:	omninames
@@ -24,6 +26,8 @@ BuildRequires:	perl tcl tk glibc-devel
 BuildRequires:	python >= %{py_ver}
 BuildRequires:	python-devel >=  %{py_ver}
 BuildRequires:	openssl-devel
+%{!?notmdk:Requires(pre): rpm-helper}
+%{!?notmdk:Requires(preun): rpm-helper}
 Provides:	corba
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	%{lib_name} = %version
@@ -50,15 +54,14 @@ linked with %{lib_name_orig}.
 Warning:
 Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
-%package -n	%{lib_namedevel}
+%package -n	%{lib_name}-devel
 Summary:	Header files and libraries needed for %{name} development
 Group:		Development/C++
 Requires:	%{lib_name} = %{version}
 Provides:	%{lib_name_orig}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
-Obsoletes:  %mklibname -d %name 4
 
-%description -n	%{lib_namedevel}
+%description -n	%{lib_name}-devel
 This package includes the header files and libraries needed for
 developing programs using %{name}.
 
@@ -67,20 +70,27 @@ Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
 # docs and examples are in a separate package
 
-%package -n	%{lib_name_orig}-doc
-Summary:	Header files and libraries needed for %{name} development
-Group:		Development/C++
+%package -n	%{name}-doc
+Summary:	Documentation for omniORB
+Group:		Documentation
 Requires:	%{name} = %{version}
 Provides:	%{lib_name_orig}-doc
-Provides:	%{name}-doc
-Provides:	%{lib_name_orig}3-doc
-Obsoletes:	%{lib_name_orig}3-doc
+Obsoletes:	%{lib_name_orig}-doc
 
-%description -n	%{lib_name_orig}-doc
+%description -n	%{name}-doc
 This package includes developers doc including examples.
 
 Warning:
 Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
+
+
+%package -n python-omniidl
+Group:		Development/Python
+Summary:	OmniOrb IDL compiler
+Conflicts:	%{lib_name}-devel < 4.1.0
+
+%description -n python-omniidl
+OmniOrb IDL compiler
 
 %prep 
 %setup -n omniORB-%{version} -q -a1
@@ -110,8 +120,20 @@ install -m 644 man/man1/* %buildroot%{_mandir}/man1/
 mkdir -p  %buildroot/var/log/omninames
 chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 
+mkdir -p %{buildroot}%{py_platsitedir}/%{name}
+pushd %{buildroot}%{py_platsitedir}/%{name}
+%python_compile_opt
+%python_compile
+#install *.pyc *.pyo %{buildroot}%{py_platsitedir}/%{name}
+
 %clean
 [ -z %buildroot ] || rm -rf %buildroot
+
+%post
+%_post_service omninames
+
+%preun
+%_preun_service omninames
 
 %post   -n %{lib_name} -p /sbin/ldconfig
 
@@ -119,19 +141,19 @@ chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 
 %files
 %defattr (-,root,root)
-%doc CREDITS ReleaseNotes.txt README.FIRST.txt README.unix
+%doc CREDITS ReleaseNotes.txt
 %_bindir/*
+%exclude %_bindir/omniidl*
 %config(noreplace) %_sysconfdir/*.cfg
-%config(noreplace) %_sysconfdir/init.d/*
+%_sysconfdir/init.d/*
 %attr(644,root,man)  %{_mandir}/man1/*
 %dir %attr(754,root,root) /var/log/omninames
 
 %files -n %{lib_name}
 %defattr (-,root,root)
 %{_libdir}/*.so.*
-%_libdir/python%{py_ver}/site-packages/_omniidlmodule.so.*
 
-%files -n %{lib_namedevel}
+%files -n %{lib_name}-devel
 %defattr(-,root,root)
 %doc README* 
 %{_libdir}/*.a
@@ -146,10 +168,15 @@ chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 %{_includedir}/omnithread.h
 %{_includedir}/omnithread/*
 
+%_libdir/pkgconfig/*
+
+%files -n python-omniidl
+%defattr(-,root,root,755)
+
+%_bindir/omniidl*
 %_datadir/idl/omniORB/*.idl
 %_datadir/idl/omniORB/COS/*.idl
 
-%_libdir/pkgconfig/*
 %dir %py_puresitedir/omniidl
 %py_puresitedir/omniidl/*
 %dir %py_puresitedir/omniidl_be
@@ -162,8 +189,9 @@ chmod 755 %buildroot/%{_includedir}/{omnithread,COS,omniORB4,omniORB4/internal}
 %py_puresitedir/omniidl_be/cxx/dynskel
 %py_puresitedir/omniidl_be/cxx/impl
 %py_platsitedir/_omniidlmodule.so
+%_libdir/python%{py_ver}/site-packages/_omniidlmodule.so.*
 
-%files -n %{lib_name_orig}-doc
+%files -n %{name}-doc
 %defattr(-,root,root)
 %doc doc/*
 
