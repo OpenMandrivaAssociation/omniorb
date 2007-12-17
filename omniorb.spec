@@ -29,7 +29,6 @@ BuildRequires:	openssl-devel
 %{!?notmdk:Requires(pre): rpm-helper}
 %{!?notmdk:Requires(preun): rpm-helper}
 Provides:	corba
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	%{lib_name} = %version
 ExclusiveArch:	ppc i586 x86_64
 
