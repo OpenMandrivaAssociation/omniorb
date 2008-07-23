@@ -72,7 +72,7 @@ Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
 %package -n	%{name}-doc
 Summary:	Documentation for omniORB
-Group:		Documentation
+Group:		Development/C++
 Requires:	%{name} = %{version}
 Provides:	%{lib_name_orig}-doc
 Obsoletes:	%{lib_name_orig}-doc
