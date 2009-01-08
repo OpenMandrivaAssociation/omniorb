@@ -1,9 +1,10 @@
 %define version 4.1.0
-%define release %mkrel 4
+%define release %mkrel 5
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
 %define lib_name	%mklibname %{name} %{lib_major}
+%define develname 	%mklibname -d %{name}
 %{expand:%%define py_ver %(python -V 2>&1| awk '{print $2}'|cut -d. -f1-2)}
 %define python_compile_opt python -O -c "import compileall; compileall.compile_dir('.')"
 %define python_compile     python -c "import compileall; compileall.compile_dir('.')"
@@ -54,14 +55,17 @@ linked with %{lib_name_orig}.
 Warning:
 Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
-%package -n	%{lib_name}-devel
+%package -n	%{develname}
 Summary:	Header files and libraries needed for %{name} development
 Group:		Development/C++
 Requires:	%{lib_name} = %{version}
 Provides:	%{lib_name_orig}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	%{_lib}omniorbpy-devel < %{version}-%{release}
+Obsoletes:	%{_lib}omniorb4-devel < %{version}-%{release}
+Obsoletes:	%{_lib}omniorb-devel < %{version}-%{release}
 
-%description -n	%{lib_name}-devel
+%description -n	%{develname}
 This package includes the header files and libraries needed for
 developing programs using %{name}.
 
@@ -76,6 +80,7 @@ Group:		Development/C++
 Requires:	%{name} = %{version}
 Provides:	%{lib_name_orig}-doc
 Obsoletes:	%{lib_name_orig}-doc
+Obsoletes:	libomniorbpy-doc < %{version}-%{release}
 
 %description -n	%{name}-doc
 This package includes developers doc including examples.
@@ -88,6 +93,7 @@ Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 Group:		Development/Python
 Summary:	OmniOrb IDL compiler
 Conflicts:	%{lib_name}-devel < 4.1.0
+Obsoletes:	%{_lib}omniorbpy2 < %{version}-%{release}
 
 %description -n python-omniidl
 OmniOrb IDL compiler
@@ -96,7 +102,7 @@ OmniOrb IDL compiler
 %setup -n omniORB-%{version} -q -a1
 
 %build
-%configure --with-openssl=%{_prefix}
+%configure2_5x --with-openssl=%{_prefix}
 %make
 
 %install
@@ -157,7 +163,7 @@ pushd %{buildroot}%{py_platsitedir}/%{name}
 %defattr (-,root,root)
 %{_libdir}/*.so.*
 
-%files -n %{lib_name}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %doc README* 
 %{_libdir}/*.a
