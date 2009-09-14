@@ -1,5 +1,5 @@
 %define version 4.1.0
-%define release %mkrel 5
+%define release %mkrel 6
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
