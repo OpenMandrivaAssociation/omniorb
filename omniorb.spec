@@ -1,5 +1,5 @@
-%define version 4.1.0
-%define release %mkrel 6
+%define version		4.1.4
+%define release		%mkrel 1
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
@@ -12,20 +12,18 @@
 
 # virtual (ie empty) package to enforce naming convention
 
-Summary:	Object Request Broker (ORB) from AT&T (CORBA 2.3)
+Summary:	A robust high performance CORBA ORB for C++ and Python
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 License:	GPL
 Group:		System/Libraries
 Source0:	http://prdownloads.sourceforge.net/sourceforge/omniorb/omniORB-%{version}.tar.gz
-Source1:	omniEvents-2_4_0-src.tar.bz2
-Source2:	omniORB.cfg
-Source3:	omninames
+Source1:	omniORB.cfg
+Source2:	omninames
 URL:		http://omniorb.sourceforge.net/
-BuildRequires:	perl tcl tk glibc-devel
-BuildRequires:	python >= %{py_ver}
-BuildRequires:	python-devel >=  %{py_ver}
+BuildRequires:	tcl tk
+%py_requires -d
 BuildRequires:	openssl-devel
 %{!?notmdk:Requires(pre): rpm-helper}
 %{!?notmdk:Requires(preun): rpm-helper}
@@ -34,26 +32,29 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	%{lib_name} = %version
 ExclusiveArch:	ppc i586 x86_64
 
-%description
-omniORB is an Object Request Broker (ORB) from AT&T which implements
-specification 2.3 of the Common Object Request Broker Architecture (CORBA).
+Patch0:		omniORB-4.1.4-format.patch
 
-Warning:
-Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
+%description
+omniORB is a robust high performance CORBA ORB for C++ and Python.
+It is freely available under the terms of the GNU Lesser General Public License
+(for the libraries), and GNU General Public License (for the tools). omniORB
+is largely CORBA 2.6 compliant.
+
+omniORB is one of only three ORBs to have been awarded the Open Group's Open
+Brand for CORBA. This means that omniORB has been tested and certified CORBA
+compliant, to version 2.1 of the CORBA specification. You can find out more
+about the branding program at the Open Group. 
 
 # main package (contains *.so.[major].*, and binaries)
 
 %package -n	%{lib_name}
-Summary:	Object Request Broker (ORB) from AT&T (CORBA 2.3)
+Summary:	a robust high performance CORBA ORB for C++ and Python
 Group:		System/Libraries
 Provides:	%{lib_name_orig} = %{version}-%{release}
 
 %description -n	%{lib_name}
 This package contains the library needed to run programs dynamically
 linked with %{lib_name_orig}.
-
-Warning:
-Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
 
 %package -n	%{develname}
 Summary:	Header files and libraries needed for %{name} development
@@ -69,9 +70,6 @@ Obsoletes:	%{_lib}omniorb-devel < %{version}-%{release}
 This package includes the header files and libraries needed for
 developing programs using %{name}.
 
-Warning:
-Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
-
 # docs and examples are in a separate package
 
 %package -n	%{name}-doc
@@ -85,9 +83,6 @@ Obsoletes:	libomniorbpy-doc < %{version}-%{release}
 %description -n	%{name}-doc
 This package includes developers doc including examples.
 
-Warning:
-Before release 4.0.0, it contains OmnyORBpy, now it is a separate package.
-
 
 %package -n python-omniidl
 Group:		Development/Python
@@ -99,7 +94,9 @@ Obsoletes:	%{_lib}omniorbpy2 < %{version}-%{release}
 OmniOrb IDL compiler
 
 %prep 
-%setup -n omniORB-%{version} -q -a1
+%setup -q -n omniORB-%{version}
+
+%patch0 -p1
 
 %build
 %configure2_5x --with-openssl=%{_prefix}
@@ -117,8 +114,8 @@ install -m 755 -d %buildroot/var/omninames/
 
 ##### copy files #####
 
-install -m 644 %{SOURCE2} %buildroot%_sysconfdir
-install -m 755 %{SOURCE3} %buildroot%_sysconfdir/init.d/omninames
+install -m 644 %{SOURCE1} %buildroot%_sysconfdir
+install -m 755 %{SOURCE2} %buildroot%_sysconfdir/init.d/omninames
 
 install -m 644 man/man1/* %buildroot%{_mandir}/man1/
 #install -m 644 man/man5/* %buildroot%{_mandir}/man5/
@@ -204,5 +201,3 @@ pushd %{buildroot}%{py_platsitedir}/%{name}
 %files -n %{name}-doc
 %defattr(-,root,root)
 %doc doc/*
-
-
