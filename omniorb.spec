@@ -1,5 +1,5 @@
 %define version		4.1.4
-%define release		%mkrel 1
+%define release		%mkrel 2
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
@@ -59,6 +59,7 @@ linked with %{lib_name_orig}.
 %package -n	%{develname}
 Summary:	Header files and libraries needed for %{name} development
 Group:		Development/C++
+Requires:	%{name} = %{version}
 Requires:	%{lib_name} = %{version}
 Provides:	%{lib_name_orig}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
