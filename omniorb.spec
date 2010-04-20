@@ -1,5 +1,5 @@
 %define version		4.1.4
-%define release		%mkrel 2
+%define release		%mkrel 3
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
@@ -33,6 +33,7 @@ Requires:	%{lib_name} = %version
 ExclusiveArch:	ppc i586 x86_64
 
 Patch0:		omniORB-4.1.4-format.patch
+Patch1:		omniORB-4.1.4-openssl-1.0.patch
 
 %description
 omniORB is a robust high performance CORBA ORB for C++ and Python.
@@ -96,8 +97,8 @@ OmniOrb IDL compiler
 
 %prep 
 %setup -q -n omniORB-%{version}
-
 %patch0 -p1
+%patch1 -p0
 
 %build
 %configure2_5x --with-openssl=%{_prefix}
