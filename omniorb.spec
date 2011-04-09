@@ -1,5 +1,5 @@
-%define version		4.1.4
-%define release		%mkrel 4
+%define version		4.1.5
+%define release		%mkrel 1
 %define name		omniorb
 %define lib_name_orig	lib%{name}
 %define lib_major	4
@@ -18,12 +18,12 @@ Version:	%{version}
 Release:	%{release}
 License:	GPL
 Group:		System/Libraries
-Source0:	http://prdownloads.sourceforge.net/sourceforge/omniorb/omniORB-%{version}.tar.gz
+Source0:	http://prdownloads.sourceforge.net/sourceforge/omniorb/omniORB-%{version}.tar.bz2
 Source1:	omniORB.cfg
 Source2:	omninames
 URL:		http://omniorb.sourceforge.net/
 BuildRequires:	tcl tk
-%py_requires -d
+BuildRequires:	python-devel
 BuildRequires:	openssl-devel
 %{!?notmdk:Requires(pre): rpm-helper}
 %{!?notmdk:Requires(preun): rpm-helper}
@@ -33,7 +33,7 @@ Requires:	%{lib_name} = %version
 ExclusiveArch:	ppc i586 x86_64
 
 Patch0:		omniORB-4.1.4-format.patch
-Patch1:		omniORB-4.1.4-openssl-1.0.patch
+Patch2:		omniORB-4.1.4-link.patch
 
 %description
 omniORB is a robust high performance CORBA ORB for C++ and Python.
@@ -98,7 +98,7 @@ OmniOrb IDL compiler
 %prep 
 %setup -q -n omniORB-%{version}
 %patch0 -p1
-%patch1 -p0
+%patch2 -p0
 
 %build
 %configure2_5x --with-openssl=%{_prefix}
