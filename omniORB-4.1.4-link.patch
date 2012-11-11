@@ -1,0 +1,11 @@
+--- src/tool/omniidl/cxx/dir.mk.link	2011-04-09 20:39:55.000000000 +0200
++++ src/tool/omniidl/cxx/dir.mk	2011-04-09 20:40:25.000000000 +0200
+@@ -194,7 +194,7 @@
+ 	(set -x; \
+ 	$(RM) $@; \
+ 	$(CXXLINK) $(CXXLINKOPTIONS) -shared -o $@ -Wl,-soname,$(soname) $(IMPORT_LIBRARY_FLAGS) \
+-	 $(filter-out $(LibSuffixPattern),$^) $(LIBS)\
++	 $(filter-out $(LibSuffixPattern),$^) `python-config --libs` $(LIBS)\
+ 	)
+ 
+ export:: $(lib)
