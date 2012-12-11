@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# omniNames This shell script takes care of loading omniNames
+#           for i.e. 3Dwm server
+#
+# chkconfig: 2345 80 30
+#
+# description: Lauching omniNames server.
+#
+# (c) MandrakeSoft, Lenny Cartier <lenny@mandrakesoft.com>
+#
+# config: /etc/omniORB.cfg
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+
+# Check omniORB config file
+[ ! -f /etc/omniORB.cfg ] && exit 1
+
+# omniNames
+OMNINAMES=/usr/bin/omniNames
+
+# omnonames options
+OMNI_LOGDIR="-logdir /var/log/omninames"
+OMNI_FIRST="-start"
+
+
+case "$1" in
+
+start)
+		echo -n "Starting omniNames server :" 
+		
+		# does /var/log/omninames exist ?
+		if [ ! -f /var/log/omninames/omninames-$HOSTNAME.log ]; then
+			daemon $OMNINAMES $OMNI_FIRST $OMNI_LOGDIR &	
+		else
+			daemon $OMNINAMES $OMNI_LOGDIR &
+		fi
+		
+		success 
+		RETVAL=$?
+		echo 
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/omniNames 
+		echo
+    ;;
+stop)
+		echo -n "Stopping omniNames:" 
+		killproc omniNames
+		RETVAL=$?
+
+		echo
+		[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/omniNames
+    ;;  
+restart|reload)
+ 		$0 stop 
+    		$0 start
+    		RETVAL=$?
+    ;;
+status)
+	        status omniNames
+	        RETVAL=$?
+    ;;
+
+
+    *)
+        echo "Usage: $0 {start|stop|restart|reload}"
+        exit 1
+	;;
+esac
+
+exit 0

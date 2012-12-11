@@ -203,3 +203,81 @@ pushd %{buildroot}%{py_platsitedir}/%{name}
 %files -n %{name}-doc
 %defattr(-,root,root)
 %doc doc/*
+
+
+%changelog
+* Sat Apr 09 2011 Funda Wang <fwang@mandriva.org> 4.1.5-1mdv2011.0
++ Revision: 652123
+- new version 4.1.5
+
+* Fri Oct 29 2010 Michael Scherer <misc@mandriva.org> 4.1.4-4mdv2011.0
++ Revision: 590137
+- rebuild for python 2.7
+
+* Tue Apr 20 2010 Funda Wang <fwang@mandriva.org> 4.1.4-3mdv2010.1
++ Revision: 536920
+- build with openssl 1.0
+
+* Wed Feb 17 2010 Paulo Andrade <pcpa@mandriva.com.br> 4.1.4-1mdv2010.1
++ Revision: 507322
+- Update to omniORB 4.1.4
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+
+* Thu Jan 08 2009 Funda Wang <fwang@mandriva.org> 4.1.0-5mdv2009.1
++ Revision: 327048
+- obsolete old packages
+
+* Wed Jul 23 2008 Thierry Vignaud <tv@mandriva.org> 4.1.0-4mdv2009.0
++ Revision: 243325
+- fix group
+- rebuild
+- kill re-definition of %%buildroot on Pixel's request
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+  + Buchan Milne <bgmilne@mandriva.org>
+    - Change subpackage names to comply with packaging policies and rearrange
+     files to be more logically placed
+
+* Wed Jun 27 2007 Olivier Thauvin <nanardon@mandriva.org> 4.1.0-1mdv2008.0
++ Revision: 45143
+- 4.1.0
+
+
+* Sat Dec 09 2006 Olivier Thauvin <nanardon@mandriva.org> 4.0.6-3mdv2007.0
++ Revision: 94356
+- allow build on x86_64
+- Import omniorb
+
+* Sat Jul 23 2005 Nicolas Lécureuil <neoclust@mandriva.org> 4.0.6-2mdk
+- Fix file section
+
+* Sat Jul 23 2005 Nicolas Lécureuil <neoclust@mandriva.org> 4.0.6-1mdk
+- New release 4.0.6
+
+* Tue Jan 04 2005 Lenny Cartier <lenny@mandrakesoft.com> 4.0.5-1mdk
+- 4.0.5
+
+* Sun Dec 05 2004 Michael Scherer <misc@mandrake.org> 4.0.3-5mdk
+- Rebuild for new python
+
+* Sat Jul 03 2004 Lenny Cartier <lenny@mandrakesoft.com> 4.0.3-4mdk
+- rebuild
+
+* Tue Feb 24 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 4.0.3-3mdk
+- fix initscript (S3, from Dirk O. Siebnich <dok@dok-net.net>)
+
+* Sat Dec 13 2003 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 4.0.3-2mdk
+- fix provides
+- fix obsolete-not-provided
+
+* Sat Dec 13 2003 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 4.0.3-1mdk
+- from Dirk O. Siebnich <dok@dok-net.net>:
+	o 4.0.3
+
