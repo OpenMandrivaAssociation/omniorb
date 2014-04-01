@@ -12,9 +12,9 @@
 %define devname %mklibname %{name} -d
 
 Summary:	A robust high performance CORBA ORB for C++ and Python
-Name:		omnirb
+Name:		omniorb
 Version:	4.1.5
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://omniorb.sourceforge.net/
@@ -65,7 +65,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libcos4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libcos4}
 %{_libdir}/libCOS%{api}.so.%{major}*
@@ -79,7 +79,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libcosdynamic4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libcosdynamic4}
 %{_libdir}/libCOSDynamic%{api}.so.%{major}*
@@ -93,7 +93,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libcodesets4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libcodesets4}
 %{_libdir}/libomniCodeSets%{api}.so.%{major}*
@@ -107,7 +107,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libconmgmt4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libconmgmt4}
 %{_libdir}/libomniConnectionMgmt%{api}.so.%{major}*
@@ -121,7 +121,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libdynamic4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libdynamic4}
 %{_libdir}/libomniDynamic%{api}.so.%{major}*
@@ -136,7 +136,7 @@ Obsoletes:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{liborb4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{liborb4}
 %{_libdir}/libomniORB%{api}.so.%{major}*
@@ -150,7 +150,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libssl4}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libssl4}
 %{_libdir}/libomnisslTP%{api}.so.%{major}*
@@ -164,7 +164,7 @@ Conflicts:	%{_lib}omniorb4 < 4.1.5-2
 
 %description -n %{libomnithread}
 This package contains the library needed to run programs dynamically
-linked with omnirb.
+linked with omniorb.
 
 %files -n %{libomnithread}
 %{_libdir}/libomnithread.so.%{thread_major}*
