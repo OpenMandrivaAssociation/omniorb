@@ -14,7 +14,7 @@
 Summary:	A robust high performance CORBA ORB for C++ and Python
 Name:		omniorb
 Version:	4.1.5
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		System/Libraries
 Url:		http://omniorb.sourceforge.net/
