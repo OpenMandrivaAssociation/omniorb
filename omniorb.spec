@@ -17,7 +17,7 @@ Version:	4.1.5
 Release:	4
 License:	GPLv2+
 Group:		System/Libraries
-Url:		http://omniorb.sourceforge.net/
+Url:		https://omniorb.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/sourceforge/omniorb/omniORB-%{version}.tar.bz2
 Source1:	omniORB.cfg
 Source2:	omninames
