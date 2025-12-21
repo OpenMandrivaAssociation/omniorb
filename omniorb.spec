@@ -23,6 +23,11 @@ Source1:	omniORB.cfg
 Source2:	omninames
 Patch0:		omniORB-4.1.4-format.patch
 Patch2:		omniORB-4.1.4-link.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	tcl
 BuildRequires:	tk
 BuildRequires:	pkgconfig(openssl)
